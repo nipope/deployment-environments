@@ -11,7 +11,8 @@
   "parameters": {
     "name": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "defaultName",
+      "allowedValues": ["defaultName", "name1"],
       "metadata": {
         "description": "Name of the Function App"
       }
@@ -23,11 +24,28 @@
         "description": "Location to deploy the environment resources"
       }
     },
-    "supportsHttpsTrafficOnly": {
+    "booleanParam": {
       "type": "bool",
       "defaultValue": true,
+      "allowedValues": [true, false],
       "metadata": {
         "description": "Allows https traffic only to Storage Account and Functions App if set to true."
+      }
+    },
+    "arrayParam": {
+      "type": "array",
+      "defaultValue": ["test"],
+      "allowedValues": [["test"], ["allowed2"]],
+      "metadata": {
+        "description": "An array parameter"
+      }
+    },
+    "intParam": {
+      "type": "int",
+      "defaultValue": 5,
+      "allowedValues": [5,6,7],
+      "metadata": {
+        "description": "An int parameter"
       }
     },
     "runtime": {
@@ -45,6 +63,7 @@
     "tags": {
       "type": "object",
       "defaultValue": {},
+      "allowedValues": [{}, {"testTag": "test"}],
       "metadata": {
         "description": "Tags to apply to environment resources"
       }
@@ -78,6 +97,7 @@
         "tier": "Dynamic",
         "name": "Y1"
       },
+      "properties": {},
       "tags": "[parameters('tags')]"
     },
     {
@@ -90,7 +110,9 @@
       },
       "kind": "StorageV2",
       "properties": {
-        "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]"
+        "supportsHttpsTrafficOnly": "[parameters('booleanParam')]",
+        "array": "[parameters('arrayParam')]",
+        "size": "[parameters('intParam')]"
       },
       "tags": "[parameters('tags')]"
     },
@@ -105,7 +127,7 @@
       },
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('resourceName'))]",
-        "httpsOnly": "[parameters('supportsHttpsTrafficOnly')]",
+        "httpsOnly": "[parameters('booleanParam')]",
         "siteConfig": {
           "appSettings": [
             {
