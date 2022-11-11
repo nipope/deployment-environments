@@ -25,7 +25,7 @@ param resourceName string = !empty(name) ? replace(name, ' ', '-') : 'a${uniqueS
 
 var storageAcctName = toLower(replace(resourceName, '-', ''))
 
-resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
   kind: 'web'
   name: resourceName
   location: location
@@ -35,7 +35,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   tags: tags
 }
 
-resource hostingPlan 'Microsoft.Web/serverfarms@2022-03-01' = {
+resource hostingPlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: resourceName
   location: location
   sku: {
@@ -45,11 +45,12 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   tags: tags
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
   name: storageAcctName
   location: location
   sku: {
     name: 'Standard_RAGRS'
+    tier: 'Standard'
   }
   kind: 'StorageV2'
   properties: {
@@ -58,7 +59,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   tags: tags
 }
 
-resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
+resource functionApp 'Microsoft.Web/sites@2020-06-01' = {
   kind: 'functionapp'
   name: resourceName
   location: location
@@ -70,17 +71,17 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
     httpsOnly: supportsHttpsTrafficOnly
     siteConfig: {
       appSettings: [
-        // {
-        //   name: 'AzureWebJobsDashboard'
-        //   value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-        // }
+        {
+          name: 'AzureWebJobsDashboard'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+        }
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value}'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
         }
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value}'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
@@ -92,7 +93,7 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~4'
+          value: '~3'
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'

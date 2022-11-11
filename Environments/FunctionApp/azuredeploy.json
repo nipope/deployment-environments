@@ -4,15 +4,14 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.11.1.770",
-      "templateHash": "4920818387183325017"
+      "version": "0.4.451.19169",
+      "templateHash": "11350062196463977119"
     }
   },
   "parameters": {
     "name": {
       "type": "string",
-      "defaultValue": "defaultName",
-      "allowedValues": ["defaultName", "name1"],
+      "defaultValue": "",
       "metadata": {
         "description": "Name of the Function App"
       }
@@ -24,7 +23,7 @@
         "description": "Location to deploy the environment resources"
       }
     },
-    "booleanParam": {
+    "supportsHttpsTrafficOnly": {
       "type": "bool",
       "defaultValue": true,
       "allowedValues": [true, false],
@@ -63,7 +62,6 @@
     "tags": {
       "type": "object",
       "defaultValue": {},
-      "allowedValues": [{}, {"testTag": "test"}],
       "metadata": {
         "description": "Tags to apply to environment resources"
       }
@@ -73,52 +71,54 @@
       "defaultValue": "[if(not(empty(parameters('name'))), replace(parameters('name'), ' ', '-'), format('a{0}', uniqueString(resourceGroup().id)))]"
     }
   },
+  "functions": [],
   "variables": {
     "storageAcctName": "[toLower(replace(parameters('resourceName'), '-', ''))]"
   },
   "resources": [
     {
       "type": "Microsoft.Insights/components",
-      "apiVersion": "2020-02-02",
+      "apiVersion": "2020-02-02-preview",
       "name": "[parameters('resourceName')]",
       "kind": "web",
       "location": "[parameters('location')]",
       "properties": {
-        "Application_Type": "web"
+        "Application_Type": "web",
+        "array": "[parameters('arrayParam')]",
+        "int": "[parameters('intParam')]"
       },
       "tags": "[parameters('tags')]"
     },
     {
       "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2022-03-01",
+      "apiVersion": "2020-06-01",
       "name": "[parameters('resourceName')]",
       "location": "[parameters('location')]",
       "sku": {
         "tier": "Dynamic",
         "name": "Y1"
       },
-      "properties": {},
-      "tags": "[parameters('tags')]"
+      "tags": "[parameters('tags')]",
+      "properties": {}
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2022-05-01",
+      "apiVersion": "2020-08-01-preview",
       "name": "[variables('storageAcctName')]",
       "location": "[parameters('location')]",
       "sku": {
-        "name": "Standard_RAGRS"
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
       },
       "kind": "StorageV2",
       "properties": {
-        "supportsHttpsTrafficOnly": "[parameters('booleanParam')]",
-        "array": "[parameters('arrayParam')]",
-        "size": "[parameters('intParam')]"
+        "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]"
       },
       "tags": "[parameters('tags')]"
     },
     {
       "type": "Microsoft.Web/sites",
-      "apiVersion": "2022-03-01",
+      "apiVersion": "2020-06-01",
       "name": "[parameters('resourceName')]",
       "kind": "functionapp",
       "location": "[parameters('location')]",
@@ -127,16 +127,20 @@
       },
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('resourceName'))]",
-        "httpsOnly": "[parameters('booleanParam')]",
+        "httpsOnly": "[parameters('supportsHttpsTrafficOnly')]",
         "siteConfig": {
           "appSettings": [
             {
+              "name": "AzureWebJobsDashboard",
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', variables('storageAcctName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAcctName')), '2020-08-01-preview').keys[0].value)]"
+            },
+            {
               "name": "AzureWebJobsStorage",
-              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', variables('storageAcctName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAcctName')), '2022-05-01').keys[0].value)]"
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', variables('storageAcctName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAcctName')), '2020-08-01-preview').keys[0].value)]"
             },
             {
               "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', variables('storageAcctName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAcctName')), '2022-05-01').keys[0].value)]"
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', variables('storageAcctName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAcctName')), '2020-08-01-preview').keys[0].value)]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -148,7 +152,7 @@
             },
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~4"
+              "value": "~3"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
