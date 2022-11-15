@@ -1,6 +1,43 @@
-name: FunctionApp
-version: 1.0.0
-summary: Azure Function App Environment
+name: FunctionAppNew
+summary: This is a new and improved function app.
 description: Deploys an Azure Function App, Storage Account, and Application Insights
-runner: ARM
 templatePath: azuredeploy.json
+parameters:
+- id: "name"
+  name: "name"
+  description: "Name of the Function App"
+  default: "hello"
+  allowed: ["hello", "test"]
+  type: "string"
+  required: false
+- id: "location"
+  name: "location"
+  description: "Location to deploy the environment resources"
+  default: "[resourceGroup().location]"
+  type: "string"
+  required: false
+- id: "supportsHttpsTrafficOnly"
+  description: "Allows https traffic only to Storage Account and Functions App if set to true."
+  default: true
+  allowed: [true, false]
+  type: "bool"
+  required: false
+- id: "arrayParam"
+  description: "An array parameter"
+  default: ["test"]
+  allowed: [["test"], ["allowed2"]]
+  type: "array"
+  required: false
+- id: "intParam"
+  description: "An int parameter"
+  default: 5
+  allowed: [5,6,7]
+  type: "int"
+  required: false
+- id: "tags"
+  description: "Tags"
+  default: {}
+  allowed: [{}, {"test": 1}]
+  type: "object"
+  required: false
+runner: arm

@@ -11,7 +11,8 @@
   "parameters": {
     "name": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "hello",
+      "allowedValues": ["hello", "test"],
       "metadata": {
         "description": "Name of the Function App"
       }
@@ -62,6 +63,7 @@
     "tags": {
       "type": "object",
       "defaultValue": {},
+      "allowedValues": [{}, {"test": 1}],
       "metadata": {
         "description": "Tags to apply to environment resources"
       }
