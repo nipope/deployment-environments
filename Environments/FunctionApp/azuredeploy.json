@@ -98,8 +98,7 @@
         "tier": "Dynamic",
         "name": "Y1"
       },
-      "tags": "[parameters('tags')]",
-      "properties": {}
+      "tags": "[parameters('tags')]"
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
