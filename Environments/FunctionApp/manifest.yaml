@@ -23,4 +23,25 @@ parameters:
   type: "boolean"
   allowed: [true, false]
   required: false
+- id: "arrayParam"
+  name: "arrayParam"
+  description: "An array parameter"
+  default: ["test"]
+  allowed: [["test"], ["allowed2"]]
+  required: false
+  type: "array"
+- id: "intParam"
+  name: "intParam"
+  description: "An integer param"
+  type: "integer"
+  default: 5
+  allowed: [5,6,7]
+  required: false
+- id: 'tags'
+  name: 'tags'
+  description: 'Tags to apply to environment resources'
+  type: 'object'
+  default: {}
+  allowed: [{}, {"test": 1}]
+  required: false
 runner: arm
