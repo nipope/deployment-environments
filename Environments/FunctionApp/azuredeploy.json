@@ -43,6 +43,13 @@
     "intParam": {
       "type": "int",
       "defaultValue": 5,
+      "metadata": {
+        "description": "An int parameter"
+      }
+    },
+    "intParamWithOptions": {
+      "type": "int",
+      "defaultValue": 5,
       "allowedValues": [5,6,7],
       "metadata": {
         "description": "An int parameter"
@@ -87,7 +94,8 @@
       "properties": {
         "Application_Type": "web",
         "array": "[parameters('arrayParam')]",
-        "int": "[parameters('intParam')]"
+        "int": "[parameters('intParam')]",
+        "intWithOptions": "[parameters('intParamWithOptions')]"
       },
       "tags": "[parameters('tags')]"
     },
