@@ -30,7 +30,7 @@ parameters:
   default: 5
   required: false
 - id: "intParamWithOptions"
-  name: "intParam"
+  name: "intParamWithOptions"
   description: "An integer param"
   type: "integer"
   default: 5
