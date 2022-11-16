@@ -16,4 +16,11 @@ parameters:
   default: "[resourceGroup().location]"
   type: "string"
   required: false
+- id: "supportsHttpsTrafficOnly"
+  name: "supportsHttpsTrafficOnly"
+  description: "Allows https traffic only to Storage Account and Functions App if set to true."
+  default: true
+  type: "boolean"
+  allowed: [true, false]
+  required: false
 runner: arm
