@@ -34,6 +34,6 @@ parameters:
   description: "An integer param"
   type: "integer"
   default: 5
-  allowed: [5,6,7]
+  allowed: [5,6,7.3]
   required: false
 runner: arm

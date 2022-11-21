@@ -50,7 +50,7 @@
     "intParamWithOptions": {
       "type": "int",
       "defaultValue": 5,
-      "allowedValues": [5,6,7],
+      "allowedValues": [5,6,7.3],
       "metadata": {
         "description": "An int parameter"
       }
