@@ -36,4 +36,11 @@ parameters:
   default: 5
   allowed: [5,6,7.3]
   required: false
+- id: "arrayParam"
+  name: "arrayParam"
+  description: "An array parameter"
+  type: "array"
+  default: ["test"]
+  allowed: [["test"], ["allowed2"]]
+  required: false
 runner: arm
