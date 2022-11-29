@@ -40,6 +40,6 @@ parameters:
   name: "tags"
   description: "Tags to apply to environment resources"
   type: "object"
-  allowed: [{}, {"test": 1}]
+  default: {}
   required: false
 runner: arm
