@@ -36,11 +36,22 @@ parameters:
   default: 5
   allowed: [5,6,7.3]
   required: false
-- id: "tags"
-  name: "tags"
+- id: "tagsWithOptions"
+  name: "tagsWithOptions"
   description: "Tags to apply to environment resources"
   type: "object"
   default: "{}"
   allowed: ["{}", "{\"test\": 1}"]
+  required: false
+- id: "tags"
+  name: "tags"
+  description: "Tags to apply to environment resources"
+  type: "object"
+  default: "{\"test\": 1}"
+  required: false
+- id: "arrayParam"
+  name: "arrayParam"
+  description: "An array param"
+  type: "array"
   required: false
 runner: arm
