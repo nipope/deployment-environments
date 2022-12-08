@@ -54,4 +54,6 @@ parameters:
   description: "An array param"
   type: "array"
   required: false
+  default: "[\"hello\"]"
+  allowed: ["[\"hello\"]", "[\"test\", 2]"]
 runner: arm
