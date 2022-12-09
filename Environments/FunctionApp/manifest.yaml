@@ -9,13 +9,13 @@ parameters:
   default: "hello"
   allowed: ["hello", "test"]
   type: "string"
-  required: false
+  required: true
 - id: "location"
   name: "location"
   description: "Location to deploy the environment resources"
   default: "[resourceGroup().location]"
   type: "string"
-  required: false
+  required: true
 - id: "supportsHttpsTrafficOnly"
   name: "supportsHttpsTrafficOnly"
   description: "Allows https traffic only to Storage Account and Functions App if set to true."
@@ -49,11 +49,16 @@ parameters:
   type: "object"
   default: "{\"test\": 1}"
   required: false
-- id: "arrayParam"
-  name: "arrayParam"
+- id: "arrayParamWithOptions"
+  name: "arrayParamWithOptions"
   description: "An array param"
   type: "array"
   required: false
   default: "[\"hello\"]"
   allowed: ["[\"hello\"]", "[\"test\", 2]"]
+- id: "arrayParam"
+  name: "arrayParam"
+  description: "An array param"
+  type: "array"
+  required: false
 runner: arm
