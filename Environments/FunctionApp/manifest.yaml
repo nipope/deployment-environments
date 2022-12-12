@@ -10,6 +10,13 @@ parameters:
   allowed: ["hello", "test"]
   type: "string"
   required: true
+- id: "name1"
+  name: "name"
+  description: "Name of the Function App"
+  default: "hello"
+  allowed: ["hello", "test"]
+  type: "string"
+  required: true
 - id: "location"
   name: "location"
   description: "Location to deploy the environment resources"
