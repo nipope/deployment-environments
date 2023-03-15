@@ -1,4 +1,4 @@
-name: FunctionAppWorking
+name: FunctionApp
 summary: This is a new and improved function app.
 description: Deploys an Azure Function App, Storage Account, and Application Insights
 templatePath: azuredeploy.json
@@ -9,13 +9,20 @@ parameters:
   default: "hello"
   allowed: ["hello", "test"]
   type: "string"
-  required: false
+  required: true
+- id: "name1"
+  name: "name"
+  description: "Name of the Function App"
+  default: "hello"
+  allowed: ["hello", "test"]
+  type: "string"
+  required: true
 - id: "location"
   name: "location"
   description: "Location to deploy the environment resources"
   default: "[resourceGroup().location]"
   type: "string"
-  required: false
+  required: true
 - id: "supportsHttpsTrafficOnly"
   name: "supportsHttpsTrafficOnly"
   description: "Allows https traffic only to Storage Account and Functions App if set to true."
@@ -36,9 +43,29 @@ parameters:
   default: 5
   allowed: [5,6,7.3]
   required: false
+- id: "tagsWithOptions"
+  name: "tagsWithOptions"
+  description: "Tags to apply to environment resources"
+  type: "object"
+  default: "{}"
+  allowed: ["{}", "{\"test\": 1}"]
+  required: false
 - id: "tags"
   name: "tags"
   description: "Tags to apply to environment resources"
   type: "object"
+  default: "{\"test\": 1}"
+  required: false
+- id: "arrayParamWithOptions"
+  name: "arrayParamWithOptions"
+  description: "An array param"
+  type: "array"
+  required: false
+  default: "[\"hello\"]"
+  allowed: ["[\"hello\"]", "[\"test\", 2]"]
+- id: "arrayParam"
+  name: "arrayParam"
+  description: "An array param"
+  type: "array"
   required: false
 runner: arm

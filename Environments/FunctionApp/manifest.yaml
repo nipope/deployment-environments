@@ -61,8 +61,8 @@ parameters:
   description: "An array param"
   type: "array"
   required: false
-  default: ["hello"]
-  allowed: [["hello"], ["test", 2]]
+  default: "[\"hello\"]"
+  allowed: ["[\"hello\"]", "[\"test\", 2]"]
 - id: "arrayParam"
   name: "arrayParam"
   description: "An array param"
